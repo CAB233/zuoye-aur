@@ -2,7 +2,7 @@
 
 pkgname=openlist
 _pkgname=OpenList
-pkgver=4.1.7
+pkgver=4.1.8
 pkgrel=1
 pkgdesc='A new AList Fork to Anti Trust Crisis'
 arch=('x86_64')
@@ -27,8 +27,8 @@ source=(
     "${pkgname}.service"
     "${pkgname}.sysusers"
     "${pkgname}.tmpfiles")
-sha256sums=('7423c8e79e5061cc17f49b354472ef469d67cadf30c5143593a16363dbc7ba29'
-            '0352c4b34639c840987764404648e2163f9dbd19f8718cb99c516925f5fce0f0'
+sha256sums=('638f77c6b881e430158eaf830ff3c22da50879f0a9db5a7a519715f69e5f8060'
+            'ccb0b88ed2c1795ccaecda9b11ee564ec48eb3375ada33cd45aac0c2d35d73fe'
             'bcc213bcd50abcd5d7abe5f6dbc143e3d9f8ec06713b2eabae468867764a1af9'
             '740c0befb0112a7a85788e99b682c2245fc52edc01bc4de6f8b411dba2f50e50'
             '6c5c46e62177ab91efb0d4c4340f89177f385b058b988ce9e537a7507f44fec3')
