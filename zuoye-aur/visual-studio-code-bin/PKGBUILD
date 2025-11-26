@@ -2,8 +2,8 @@
 
 pkgname=visual-studio-code-bin
 _pkgname=visual-studio-code
-pkgver=1.106.2
-pkgrel=3
+pkgver=1.106.3
+pkgrel=1
 pkgdesc="Visual Studio Code (vscode): Editor for building and debugging modern web and cloud applications (official binary version)"
 arch=('x86_64')
 url="https://code.visualstudio.com/"
@@ -41,7 +41,7 @@ source=(
     "code-${pkgver}-workspace.xml.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver}/resources/linux/code-workspace.xml"
     "${_pkgname}-bin.sh"
 )
-sha256sums=('1e2ee771b7359238a9147e6163ac3edf197693a87f8d0d1dde83d60535fbd73d'
+sha256sums=('57dbe7b9925a6b516205813a6e0818810403409877e0161f55198ce7678607ce'
             '2f1782b30c4e040efff655fd9cf477930c5a0c81ddae27749b0cbb922c1d248e'
             'c361efa7e02fcad759ed80d2fbab67877f33219b981578af6fffaf18aeb12d9b'
             '3af748dd6578a1775e8eb7248ba397b7e11840df2ea6ee234ff76fee3dc306cf'
