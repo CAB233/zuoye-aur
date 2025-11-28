@@ -1,0 +1,55 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname="qdiskinfo"
+_gitname="QDiskInfo"
+pkgver=0.4
+pkgrel=1
+pkgdesc="A frontend for smartctl (with Aoi theme)"
+url="https://github.com/edisionnano/QDiskInfo"
+arch=('x86_64')
+license=("GPL-3.0-only")
+depends=(
+    'glibc'
+    'gcc-libs'
+    'hicolor-icon-theme'
+    'polkit'
+    'qt6-base'
+    'smartmontools'
+)
+makedepends=(
+    'cmake'
+    'ninja'
+    'qt6-declarative'
+    'qt6-tools'
+    'vulkan-headers'
+)
+source=(
+    "$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz"
+    "CrystalMarkRetro-Aoi.zip::https://sourceforge.net/projects/crystalmarkretro/files/2.0.6/CrystalMarkRetro2_0_6Aoi.zip/download"
+)
+sha256sums=('33762f494f2da4b59e770207ad5bacca4394774c76509c15d3e3fa23fbf76d33'
+            'e48659556ff2d32d607f3208cf576e399173d349a52504c3e26e8ee076e66c7f')
+
+prepare() {
+    cp -v "$srcdir/Resource/Theme/Aoi/SDAoiA-100.png" "$srcdir/$_gitname-$pkgver/dist/theme/good.png"
+    cp -v "$srcdir/Resource/Theme/Aoi/SDAoiC-100.png" "$srcdir/$_gitname-$pkgver/dist/theme/caution.png"
+    cp -v "$srcdir/Resource/Theme/Aoi/SDAoiD-100.png" "$srcdir/$_gitname-$pkgver/dist/theme/bad.png"
+    cp -v "$srcdir/Resource/Theme/Aoi/SDAoiE-100.png" "$srcdir/$_gitname-$pkgver/dist/theme/unknown.png"
+    cp -v "$srcdir/Resource/Theme/AoiLight/Background-300.png" "$srcdir/$_gitname-$pkgver/dist/theme/bg_light.png"
+    cp -v "$srcdir/Resource/Theme/AoiNight/Background-300.png" "$srcdir/$_gitname-$pkgver/dist/theme/bg_dark.png"
+}
+
+build() {
+    cmake -G Ninja -B build -S "$_gitname-$pkgver" \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DQT_VERSION_MAJOR=6 \
+        -DENABLE_TRANSLATIONS=ON \
+        -DINCLUDE_OPTIONAL_RESOURCES=ON \
+        -DCHARACTER_IS_RIGHT=ON
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+}
