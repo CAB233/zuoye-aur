@@ -1,0 +1,45 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname="kde-rounded-corners"
+_gitname="KDE-Rounded-Corners"
+pkgver=0.8.6
+pkgrel=1
+pkgdesc="Rounds the corners of your windows in KDE Plasma 6"
+url="https://github.com/matinlotfali/KDE-Rounded-Corners"
+arch=('x86_64')
+license=("GPL-3.0-only")
+depends=(
+    'glibc'
+    'gcc-libs'
+    'kconfig'
+    'kcoreaddons'
+    'ki18n'
+    'kwidgetsaddons'
+    'kwin'
+    'libepoxy'
+    'qt6-base'
+)
+makedepends=(
+    'cmake'
+    'extra-cmake-modules'
+    'ninja'
+)
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('11201977db534c07e193cbd3466921c69477287cb1d7fbe452d6887778667cc0')
+
+build() {
+    local _cmake_options=(
+        '-GNinja'
+        '-Bbuild'
+        "-S$_gitname-$pkgver"
+        '-DCMAKE_INSTALL_PREFIX=/usr'
+        '-DCMAKE_BUILD_TYPE=Release'
+    )
+
+    cmake "${_cmake_options[@]}"
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+}
