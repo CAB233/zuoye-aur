@@ -1,0 +1,32 @@
+# Maintainer: Mark Wagie <mark dot wagie at proton dot me>
+pkgname=fluent-gtk-theme-git
+pkgver=2025.04.17.r26.g9fc5291
+pkgrel=1
+pkgdesc="Fluent design gtk theme for linux desktops"
+arch=('any')
+url="https://github.com/vinceliuice/Fluent-gtk-theme"
+license=('GPL-3.0-or-later')
+makedepends=(
+  'git'
+  'sassc'
+)
+optdepends=(
+  'fluent-cursor-theme: Matching cursor theme'
+  'fluent-icon-theme: Matching icon theme'
+  'gtk-engine-murrine: GTK2 theme support'
+)
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+source=('git+https://github.com/vinceliuice/Fluent-gtk-theme.git')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd Fluent-gtk-theme
+  git describe --long --tags --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+package() {
+  cd Fluent-gtk-theme
+  install -d "$pkgdir/usr/share/themes"
+  ./install.sh -t default -i arch --tweaks solid -d "$pkgdir/usr/share/themes"
+}
