@@ -3,7 +3,7 @@
 pkgname="kde-rounded-corners"
 _gitname="KDE-Rounded-Corners"
 pkgver=0.8.6
-pkgrel=3
+pkgrel=4
 pkgdesc="Rounds the corners of your windows in KDE Plasma 6"
 url="https://github.com/matinlotfali/KDE-Rounded-Corners"
 arch=('x86_64')
