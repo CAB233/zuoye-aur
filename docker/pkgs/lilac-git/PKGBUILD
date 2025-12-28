@@ -8,7 +8,7 @@ pkgver=r1172.5017595
 pkgrel=1
 pkgdesc='The build bot for archlinuxcn'
 arch=(any)
-url='https://github.com/archlinuxcn/lilac'
+url='https://github.com/Misaka13514-AUR/lilac'
 license=(GPL-3.0-only)
 depends=(python git devtools nvchecker gnupg pid_children fakeroot bubblewrap pacman-contrib bash
          python-httpx python-h2 python-lxml python-yaml python-tomli-w pyalpm
@@ -21,7 +21,7 @@ optdepends=(
 checkdepends=(python-pytest python-pytest-asyncio)
 provides=("$_pkgname=$pkgver")
 conflicts=("$_pkgname")
-source=('git+https://github.com/archlinuxcn/lilac.git')
+source=('git+https://github.com/Misaka13514-AUR/lilac.git')
 sha256sums=('SKIP')
 
 pkgver() {

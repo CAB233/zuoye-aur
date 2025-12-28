@@ -14,6 +14,9 @@ repodir = "/home/lilac/lilac/gitrepo/<REPO_NAME>"
 # comment out if there's no need to copy built packages
 destdir = "/home/lilac/lilac/repo"
 
+# Misaka13514-AUR/lilac: The path where lilac search dependency packages besides repodir
+depsdir = "/home/lilac/lilac/remote/repo/x86_64"
+
 [lilac]
 # this is the name in the mail header and subject
 name = "lilac"
