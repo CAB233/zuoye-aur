@@ -3,15 +3,15 @@
 
 pkgname="v2ray-rules-dat"
 pkgver=202511262214
-pkgrel=7
+pkgrel=8
 pkgdesc="V2Ray 路由规则文件加强版，可代替 V2Ray 官方 geoip.dat 和 geosite.dat"
 arch=('any')
 url="https://github.com/Loyalsoldier/v2ray-rules-dat"
 license=("GPL-3.0")
 source=("https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
         "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat")
-sha512sums=('bc2d7ec10dbca3c88f6924d6a9a426cc2e42e0d817752732f0f97ee2b5fb4e03f0f57dd953ac7efed534a7c0f1b7c943b190d1b21bdb57b2129eaa056f1fd7a1'
-            '23f764052ef5099e218c9e247f3586171d1d747ee82a800344708c984aedf8404bd747a09500ad0c8f6d0446663261410a9fe92810839e64c762bd7e0adc775a')
+sha512sums=('f364ef27e60aafebb9104a6ecabbaf28995c818e7e1da813d5a6d1959cc0f8ef20b8ac8f5e4c1e33f20da077454f738b8f2dd48d65cfcfdfe02b7b11e8711cb1'
+            '6e3665da9cb2ac37faa757f6b43dfcb3d1b073819271361649f255fee6e9d71c0a3290cd4ea6e9ccd00530ebb9da41b9915ac44841cf67b3fa7bfa04dde3ae88')
 
 package() {
     install -Dvm644 geosite.dat -t "${pkgdir}/usr/share/v2ray-rules-dat/"
