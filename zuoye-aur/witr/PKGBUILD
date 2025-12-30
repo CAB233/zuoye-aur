@@ -1,0 +1,49 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=witr
+pkgver=0.1.2
+pkgrel=1
+pkgdesc='CLI tool that explains the causal chain behind running processes'
+arch=('x86_64')
+url='https://github.com/pranshuparmar/witr'
+license=('Apache-2.0')
+depends=('glibc')
+makedepends=(
+    'git'
+    'go'
+)
+source=("git+$url.git#tag=v$pkgver")
+sha256sums=('5fa0c3e88e2dfc3c81261d7306d86bddb43a0ca627dc94a78d6be77a84f47073')
+
+build() {
+    cd "$pkgname"
+    local COMMIT=$(git rev-parse --short HEAD)
+    local DATE=$(date +%Y-%m-%d)
+    local ldflags=(
+        "-s"
+        "-w"
+        "-linkmode=external"
+        "-X main.version=$pkgver"
+        "-X main.commit=$COMMIT"
+        "-X main.buildDate=$DATE"
+    )
+    export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+    export CGO_CPPFLAGS="${CPPFLAGS}"
+    export CGO_CFLAGS="${CFLAGS}"
+    export CGO_CXXFLAGS="${CXXFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS}"
+    export CGO_ENABLED=1
+
+    go build \
+        -v \
+        -tags "${tags[*]}" \
+        -ldflags "${ldflags[*]}" \
+        ./cmd/witr
+}
+
+package() {
+    cd "$pkgname"
+    install -Dvm755 "$pkgname" -t "$pkgdir/usr/bin/"
+    install -Dvm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname/"
+    install -Dvm644 docs/witr.1 "$pkgdir/usr/share/man/man1/witr.1"
+}
