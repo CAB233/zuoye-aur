@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=witr
-pkgver=0.1.5
+pkgver=0.1.6
 pkgrel=1
 pkgdesc='CLI tool that explains the causal chain behind running processes'
 arch=('x86_64')
@@ -13,7 +13,7 @@ makedepends=(
     'go'
 )
 source=("git+$url.git#tag=v$pkgver")
-sha256sums=('e288b31e15730a91bbedef670c172b485c11177976055ce7ea08093e34dfa4e4')
+sha256sums=('24f3a03a83f3850ae2a666bd05439aeab51e2e00148f228c566183c94351836c')
 
 build() {
     cd "$pkgname"
@@ -45,5 +45,5 @@ package() {
     cd "$pkgname"
     install -Dvm755 "$pkgname" -t "$pkgdir/usr/bin/"
     install -Dvm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname/"
-    install -Dvm644 docs/witr.1 "$pkgdir/usr/share/man/man1/witr.1"
+    install -Dvm644 docs/cli/witr.1 "$pkgdir/usr/share/man/man1/witr.1"
 }
