@@ -2,7 +2,7 @@
 
 pkgname=sing-box-reF1nd
 _pkgname=sing-box
-pkgver=1.12.15
+pkgver=1.12.16
 pkgrel=1
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
@@ -18,7 +18,7 @@ makedepends=(
     'go'
 )
 source=("git+https://github.com/reF1nd/sing-box.git#tag=v${pkgver}-reF1nd")
-sha256sums=('31ca9c8b6a34656dff08f0c9b2aac0ab7c2342095c539daa700c6b0b984270fe')
+sha256sums=('606444e1768e2e3118da626a00937cf35028be0c77ded06cfc2422c91105cca8')
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
 backup=("etc/${_pkgname}/config.json")
