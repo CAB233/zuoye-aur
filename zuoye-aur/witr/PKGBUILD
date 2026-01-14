@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=witr
-pkgver=0.2.3
+pkgver=0.2.4
 pkgrel=1
 pkgdesc='CLI tool that explains the causal chain behind running processes'
 arch=('x86_64')
@@ -13,7 +13,7 @@ makedepends=(
     'go'
 )
 source=("git+$url.git#tag=v$pkgver")
-sha256sums=('627f411cb313b055b5d77ceb947a40e974e38db6f6c8c70fea616718fc4eee1e')
+sha256sums=('7ce6a011f7b3b380e87d5e0cfa6b843272612972c3b1d80b70a4ab279d583d61')
 
 build() {
     cd "$pkgname"
