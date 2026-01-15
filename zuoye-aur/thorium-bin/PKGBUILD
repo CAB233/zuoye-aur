@@ -1,0 +1,74 @@
+# Maintainer:
+# Contributor: JPratama7 <josepratama080@gmail.com>
+# Contributor: Dominik Adrian Grzywak <starterx4 at gmail dot com>
+
+_pkgname="thorium"
+pkgname="$_pkgname-bin"
+pkgbase="$pkgname"
+pkgver=138.0.7204.300
+pkgrel=1
+pkgdesc="Chromium fork focused on high performance and security"
+url="https://github.com/Alex313031/thorium"
+license=('BSD-3-Clause')
+depends=('gtk3' 'nss' 'alsa-lib' 'xdg-utils' 'libxss' 'libcups' 'libgcrypt'
+         'ttf-liberation' 'systemd' 'dbus' 'libpulse' 'pciutils' 'libva'
+         'libffi' 'desktop-file-utils' 'hicolor-icon-theme')
+arch=('x86_64')
+source=(
+  "$url/releases/download/M$pkgver/${_pkgname}-browser_${pkgver}_AVX2.deb"
+  "thorium.desktop"
+)
+sha256sums=('690ad019a726addcfd8c3e1813f1785c83354cdaec29c4d66f0c93238f8c7f99'
+            'e8ff43a63db2124621000217337ead7d166895a1fc289bc9c93de39211223dd6')
+options=('!emptydirs' '!strip' '!debug')
+
+prepare() {
+  install -Dvm644 /dev/stdin "$_pkgname.sh" << END
+#!/usr/bin/env bash
+
+# Allow users to override command-line options
+XDG_CONFIG_HOME=\${XDG_CONFIG_HOME:-~/.config}
+_FLAGS_FILE="\$XDG_CONFIG_HOME/thorium-flags.conf"
+
+if [[ -f "\$_FLAGS_FILE" ]]; then
+  _USER_FLAGS="\$(cat "\$_FLAGS_FILE")"
+fi
+
+# Launch
+exec /usr/lib/thorium/thorium \$_USER_FLAGS "\$@"
+END
+}
+
+package() {
+  echo "  -> Extracting the archive..."
+  bsdtar -xf data.tar.xz -C "$srcdir"
+  
+  echo "  -> Moving files in place..."
+  mkdir -p "$pkgdir/usr/lib/$_pkgname/"
+  cp -a "$srcdir/opt/chromium.org/thorium"/* "$pkgdir/usr/lib/$_pkgname/"
+  install -Dm644 "$srcdir/thorium.desktop" \
+    "$pkgdir/usr/share/applications/thorium.desktop"
+  install -Dm644 "$srcdir/usr/share/appdata/thorium-browser.appdata.xml" \
+    "$pkgdir/usr/share/metainfo/thorium.appdata.xml"
+  install -Dm644 "$srcdir/usr/share/man/man1/thorium-browser.1.gz" \
+    "$pkgdir/usr/share/man/man1/thorium.1.gz"
+
+  # thorium
+  install -Dm755 "$_pkgname.sh" "$pkgdir/usr/bin/$_pkgname"
+  chmod 4755 "$pkgdir/usr/lib/$_pkgname/chrome-sandbox"
+
+  # Icons
+  for i in 16 24 32 48 64 128 256; do
+    install -Dm644 "$pkgdir/usr/lib/$_pkgname/product_logo_${i}.png" \
+      "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/$_pkgname.png"
+  done
+
+  # clean-up
+  echo "  -> Removing Debian Cron job, duplicate product logos and menu directory..."
+  rm -r -- \
+    "$pkgdir/usr/lib/$_pkgname/cron/" \
+    "$pkgdir/usr/lib/$_pkgname"/product_logo_*.{png,xpm} \
+    "$pkgdir/usr/lib/$_pkgname"/thorium_shell{,.png} \
+    "$pkgdir/usr/lib/$_pkgname"/thorium-browser \
+    "$pkgdir/usr/lib/$_pkgname"/xdg-*
+}
