@@ -223,7 +223,7 @@ jobs:
           apprise \
             -i html \
             -b "$message" \
-            "tgram://${APPRISE_BOT_TOKEN}/"
+            "tgram://${{ secrets.APPRISE_TELEGRAM_TOKEN }}/"
 
       - name: 上传 lilac 持久性文件
         run: |
