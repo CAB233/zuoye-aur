@@ -199,8 +199,10 @@ jobs:
           echo ""
           echo "Detailed log:"
           docker exec lilac /group-log.sh
-          
-          echo "log=$(docker exec lilac cat /home/lilac/.lilac/build.log)" >> $GITHUB_OUTPUT
+          # OUTPUT
+          echo "log<<EOF" >> "$GITHUB_OUTPUT"
+          docker exec lilac cat /home/lilac/.lilac/build.log >> $GITHUB_OUTPUT
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: 输出构建日志到 Summary
         if: steps.log.outputs.log != ''
