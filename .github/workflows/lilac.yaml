@@ -203,7 +203,7 @@ jobs:
           echo "log=$(docker exec lilac cat /home/lilac/.lilac/build.log)" >> $GITHUB_OUTPUT
 
       - name: 输出构建日志到 Summary
-        if: steps.log.outputs.build_log != ''
+        if: steps.log.outputs.log != ''
         run: |
           echo "## Build log" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
@@ -220,7 +220,7 @@ jobs:
         if: steps.log.outputs.log != ''
         run: |
           message="<b>zuoye-aur notify</b><code>${{ steps.log.outputs.log }}</code>"
-          apprise \
+          apprise -vv \
             -i html \
             -b "$message" \
             "tgram://${{ secrets.APPRISE_TELEGRAM_TOKEN }}/"
