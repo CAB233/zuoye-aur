@@ -219,7 +219,7 @@ jobs:
       - name: 推送 build.log
         if: steps.log.outputs.log != ''
         run: |
-          message="<b>zuoye-aur notify</b><code>${{ steps.log.outputs.log }}</code>"
+          message="<b>zuoye-aur notify</b><br><code>${{ steps.log.outputs.log }}</code>"
           apprise -vv \
             -i html \
             -b "$message" \
