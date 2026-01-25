@@ -4,8 +4,7 @@ FROM archlinux:base
 COPY rootfs/ /
 RUN chmod +x /group-log.sh && \
     chmod +x /repocleaner.py && \
-    chmod +x /init.sh && \
-    chmod +x /notify.sh
+    chmod +x /init.sh
 
 # Configure user for lilac
 # https://lilac.readthedocs.io/en/latest/setup.html#user-and-data

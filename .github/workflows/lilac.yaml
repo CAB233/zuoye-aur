@@ -192,19 +192,38 @@ jobs:
             /usr/bin/lilac ${{ inputs.lilac_args }}
 
       - name: 输出 lilac 日志
+        id: log
         run: |
           echo "Summary log:"
           docker exec lilac cat /home/lilac/.lilac/build.log
           echo ""
           echo "Detailed log:"
           docker exec lilac /group-log.sh
+          
+          echo "log=$(docker exec lilac cat /home/lilac/.lilac/build.log)" >> $GITHUB_OUTPUT
 
       - name: 输出构建日志到 Summary
+        if: steps.log.outputs.build_log != ''
         run: |
           echo "## Build log" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           docker exec lilac cat /home/lilac/.lilac/build.log >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: 安装 apprise
+        if: steps.log.outputs.log != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install apprise
+
+      - name: 推送 build.log
+        if: steps.log.outputs.log != ''
+        run: |
+          message="<b>zuoye-aur notify</b><code>code>${{ steps.log.outputs.log }}</code>"
+          apprise \
+            -i html \
+            -b "$message" \
+            "tgram://${APPRISE_BOT_TOKEN}/"
 
       - name: 上传 lilac 持久性文件
         run: |
