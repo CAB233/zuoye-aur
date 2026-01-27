@@ -29,6 +29,7 @@ sha256sums=('SKIP'
             'ec074a6bfa59e2a2a69d071e18f3c358eaae56f9841d3ee5053c7de685c71bdf')
 
 prepare() {
+  cd $_pkgname
   patch -d "${srcdir}/" -Np1 < "0001-feat-Dependency.resolve-search-in-depsdir.patch"
 }
 
