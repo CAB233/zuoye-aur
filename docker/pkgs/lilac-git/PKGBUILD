@@ -4,7 +4,7 @@
 
 _pkgname=lilac
 pkgname=$_pkgname-git
-pkgver=r1172.5017595
+pkgver=r1340.43f2df8
 pkgrel=1
 pkgdesc='The build bot for archlinuxcn'
 arch=(any)
@@ -28,14 +28,14 @@ source=(
 sha256sums=('SKIP'
             'ec074a6bfa59e2a2a69d071e18f3c358eaae56f9841d3ee5053c7de685c71bdf')
 
-prepare() {
-  cd $_pkgname
-  patch -d "${srcdir}/" -Np1 < "0001-feat-Dependency.resolve-search-in-depsdir.patch"
-}
-
 pkgver() {
   cd $_pkgname
   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  cd $_pkgname
+  patch -Np1 -i "${srcdir}/0001-feat-Dependency.resolve-search-in-depsdir.patch"
 }
 
 build() {
