@@ -1,0 +1,126 @@
+From 0911e24857a6d3b69b07394524d276b306d95006 Mon Sep 17 00:00:00 2001
+From: Misaka13514 <Misaka13514@gmail.com>
+Date: Thu, 1 May 2025 00:00:00 +0800
+Subject: [PATCH] feat(Dependency.resolve): search in depsdir
+
+Because poor me don't have a persistent git repo to place package tarball
+---
+ config.toml.sample |  2 ++
+ lilac              |  2 +-
+ lilac2/building.py |  5 ++++-
+ lilac2/packages.py | 21 ++++++++++++++++++---
+ lilac2/repo.py     |  1 +
+ 5 files changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/config.toml.sample b/config.toml.sample
+index e331f1c7..6d7cec15 100644
+--- a/config.toml.sample
++++ b/config.toml.sample
+@@ -13,6 +13,8 @@ repodir = "/path/to/gitrepo"
+ # The path where built packages and signatures are copied to
+ # comment out if there's no need to copy built packages
+ destdir = "/path/to/pkgdir"
++# The path where lilac search dependency packages besides repodir
++depsdir = "/path/to/pkgdir"
+ 
+ [lilac]
+ # this is the name in the mail header and subject
+diff --git a/lilac b/lilac
+index 866340ba..a822af9c 100755
+--- a/lilac
++++ b/lilac
+@@ -686,7 +686,7 @@ def main_may_raise(
+   git_pull_override()
+   failed = REPO.load_managed_lilac_and_report()
+ 
+-  depman = DependencyManager(REPO.repodir)
++  depman = DependencyManager(REPO.repodir, REPO.depsdir)
+   DEPMAP, BUILD_DEPMAP = get_dependency_map(depman, REPO.lilacinfos)
+ 
+   failed_info = D.get('failed', {})
+diff --git a/lilac2/building.py b/lilac2/building.py
+index 4d011b45..7816a859 100644
+--- a/lilac2/building.py
++++ b/lilac2/building.py
+@@ -147,7 +147,10 @@ def resolve_depends(repo: Optional[Repo], depends: Iterable[Dependency]) -> list
+         continue
+       need_build_first.add(x.pkgname)
+     else:
+-      depend_packages.append(f'../{p.relative_to(cwd)}')
++      try:
++        depend_packages.append(f'../{p.relative_to(cwd)}')
++      except ValueError:
++        depend_packages.append(str(p))
+ 
+   if need_build_first:
+     raise MissingDependencies(need_build_first)
+diff --git a/lilac2/packages.py b/lilac2/packages.py
+index 9743031b..49f278aa 100644
+--- a/lilac2/packages.py
++++ b/lilac2/packages.py
+@@ -82,11 +82,12 @@ def get_dependency_map(
+   return map, build_dep_map
+ 
+ _DependencyTuple = namedtuple(
+-  '_DependencyTuple', 'pkgdir pkgname')
++  '_DependencyTuple', 'pkgdir pkgname depsdir')
+ 
+ class Dependency(_DependencyTuple):
+   pkgdir: Path
+   pkgname: str
++  depsdir: Path
+ 
+   def resolve(self) -> Optional[Path]:
+     try:
+@@ -101,6 +102,19 @@ def resolve(self) -> Optional[Path]:
+       if info.name == self.pkgname:
+         pkgs.append(x)
+ 
++    # also search in DEPSDIR
++    if not pkgs:
++      try:
++        depsdir_files = [x for x in self.depsdir.iterdir()
++                       if x.name.endswith(('.pkg.tar.xz', '.pkg.tar.zst'))]
++      except FileNotFoundError:
++        return None
++
++      for x in depsdir_files:
++        info = archpkg.PkgNameInfo.parseFilename(x.name)
++        if info.name == self.pkgname:
++          pkgs.append(x)
++
+     if len(pkgs) == 1:
+       return pkgs[0]
+     elif not pkgs:
+@@ -112,8 +126,9 @@ def resolve(self) -> Optional[Path]:
+ class DependencyManager:
+   _CACHE: Dict[str, Dependency] = {}
+ 
+-  def __init__(self, repodir: Path) -> None:
++  def __init__(self, repodir: Path, depsdir: Path = Path('')) -> None:
+     self.repodir = repodir
++    self.depsdir = depsdir
+ 
+   def get(self, what: Union[str, Tuple[str, str]]) -> Dependency:
+     if isinstance(what, tuple):
+@@ -124,7 +139,7 @@ def get(self, what: Union[str, Tuple[str, str]]) -> Dependency:
+     key = '/'.join((pkgbase, pkgname))
+     if key not in self._CACHE:
+       self._CACHE[key] = Dependency(
+-        self.repodir / pkgbase, pkgname)
++        self.repodir / pkgbase, pkgname, self.depsdir)
+     return self._CACHE[key]
+ 
+ def get_changed_packages(from_: str, to: str) -> Set[str]:
+diff --git a/lilac2/repo.py b/lilac2/repo.py
+index a12090d3..08603ce2 100644
+--- a/lilac2/repo.py
++++ b/lilac2/repo.py
+@@ -44,6 +44,7 @@ def __init__(self, config: dict[str, Any]) -> None:
+     self.commit_msg_prefix = config['lilac'].get('commit_msg_prefix', '')
+ 
+     self.repodir = Path(config['repository']['repodir']).expanduser()
++    self.depsdir = Path(config['repository'].get('depsdir', '')).expanduser()
+     self.bindmounts = config.get('bindmounts', [])
+     self.tmpfs = config.get('misc', {}).get('tmpfs', [])
+ 
