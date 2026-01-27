@@ -1,4 +1,4 @@
-From 0911e24857a6d3b69b07394524d276b306d95006 Mon Sep 17 00:00:00 2001
+From 0bb8a59220ca196aa30b08b08397606455b9c41a Mon Sep 17 00:00:00 2001
 From: Misaka13514 <Misaka13514@gmail.com>
 Date: Thu, 1 May 2025 00:00:00 +0800
 Subject: [PATCH] feat(Dependency.resolve): search in depsdir
@@ -13,7 +13,7 @@ Because poor me don't have a persistent git repo to place package tarball
  5 files changed, 26 insertions(+), 5 deletions(-)
 
 diff --git a/config.toml.sample b/config.toml.sample
-index e331f1c7..6d7cec15 100644
+index e331f1c..6d7cec1 100644
 --- a/config.toml.sample
 +++ b/config.toml.sample
 @@ -13,6 +13,8 @@ repodir = "/path/to/gitrepo"
@@ -26,10 +26,10 @@ index e331f1c7..6d7cec15 100644
  [lilac]
  # this is the name in the mail header and subject
 diff --git a/lilac b/lilac
-index 866340ba..a822af9c 100755
+index 5e91845..94d12b2 100755
 --- a/lilac
 +++ b/lilac
-@@ -686,7 +686,7 @@ def main_may_raise(
+@@ -695,7 +695,7 @@ def main_may_raise(
    git_pull_override()
    failed = REPO.load_managed_lilac_and_report()
  
@@ -39,7 +39,7 @@ index 866340ba..a822af9c 100755
  
    failed_info = D.get('failed', {})
 diff --git a/lilac2/building.py b/lilac2/building.py
-index 4d011b45..7816a859 100644
+index 4d011b4..7816a85 100644
 --- a/lilac2/building.py
 +++ b/lilac2/building.py
 @@ -147,7 +147,10 @@ def resolve_depends(repo: Optional[Repo], depends: Iterable[Dependency]) -> list
@@ -55,7 +55,7 @@ index 4d011b45..7816a859 100644
    if need_build_first:
      raise MissingDependencies(need_build_first)
 diff --git a/lilac2/packages.py b/lilac2/packages.py
-index 9743031b..49f278aa 100644
+index 9743031..49f278a 100644
 --- a/lilac2/packages.py
 +++ b/lilac2/packages.py
 @@ -82,11 +82,12 @@ def get_dependency_map(
@@ -72,7 +72,7 @@ index 9743031b..49f278aa 100644
  
    def resolve(self) -> Optional[Path]:
      try:
-@@ -101,6 +102,19 @@ def resolve(self) -> Optional[Path]:
+@@ -101,6 +102,19 @@ class Dependency(_DependencyTuple):
        if info.name == self.pkgname:
          pkgs.append(x)
  
@@ -92,7 +92,7 @@ index 9743031b..49f278aa 100644
      if len(pkgs) == 1:
        return pkgs[0]
      elif not pkgs:
-@@ -112,8 +126,9 @@ def resolve(self) -> Optional[Path]:
+@@ -112,8 +126,9 @@ class Dependency(_DependencyTuple):
  class DependencyManager:
    _CACHE: Dict[str, Dependency] = {}
  
@@ -103,7 +103,7 @@ index 9743031b..49f278aa 100644
  
    def get(self, what: Union[str, Tuple[str, str]]) -> Dependency:
      if isinstance(what, tuple):
-@@ -124,7 +139,7 @@ def get(self, what: Union[str, Tuple[str, str]]) -> Dependency:
+@@ -124,7 +139,7 @@ class DependencyManager:
      key = '/'.join((pkgbase, pkgname))
      if key not in self._CACHE:
        self._CACHE[key] = Dependency(
@@ -113,10 +113,10 @@ index 9743031b..49f278aa 100644
  
  def get_changed_packages(from_: str, to: str) -> Set[str]:
 diff --git a/lilac2/repo.py b/lilac2/repo.py
-index a12090d3..08603ce2 100644
+index a12090d..08603ce 100644
 --- a/lilac2/repo.py
 +++ b/lilac2/repo.py
-@@ -44,6 +44,7 @@ def __init__(self, config: dict[str, Any]) -> None:
+@@ -44,6 +44,7 @@ class Repo:
      self.commit_msg_prefix = config['lilac'].get('commit_msg_prefix', '')
  
      self.repodir = Path(config['repository']['repodir']).expanduser()
@@ -124,3 +124,6 @@ index a12090d3..08603ce2 100644
      self.bindmounts = config.get('bindmounts', [])
      self.tmpfs = config.get('misc', {}).get('tmpfs', [])
  
+-- 
+2.52.0
+

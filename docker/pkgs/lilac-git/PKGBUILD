@@ -23,10 +23,10 @@ provides=("$_pkgname=$pkgver")
 conflicts=("$_pkgname")
 source=(
   'git+https://github.com/archlinuxcn/lilac.git'
-  'search-in-depsdir.patch'
+  '0001-feat-Dependency.resolve-search-in-depsdir.patch'
 )
 sha256sums=('SKIP'
-            'e89faf1619e8203864562b89505b73cca0a3d9d716c5bde39fbba78f5d881459')
+            'ec074a6bfa59e2a2a69d071e18f3c358eaae56f9841d3ee5053c7de685c71bdf')
 
 prepare() {
   patch -d "${srcdir}/" -Np1 < "search-in-depsdir.patch"
