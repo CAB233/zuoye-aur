@@ -1,0 +1,43 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=butane
+pkgver=0.26.0
+pkgrel=1
+pkgdesc='Human readable Butane Configs into machine readable Ignition Configs Translator'
+arch=('x86_64')
+url="https://github.com/coreos/butane"
+license=("Apache-2.0")
+depends=('glibc')
+makedepends=(
+    'git'
+    'go'
+)
+source=("git+${url}.git#tag=v${pkgver}")
+sha256sums=('5a5bc6d2bf2adb3e29aa30e95df0a2de1f57bedc491bd60b76e842f9774fc666')
+
+build() {
+    local ldflags=(
+        "-s"
+        "-w"
+        "-linkmode=external"
+        "-X 'github.com/coreos/butane/internal/version.Raw=$pkgver'"
+    )
+
+    export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+    export CGO_CPPFLAGS="${CPPFLAGS}"
+    export CGO_CFLAGS="${CFLAGS}"
+    export CGO_CXXFLAGS="${CXXFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS}"
+    export CGO_ENABLED=1
+
+    cd "$srcdir/$pkgname"
+    go build \
+        -v \
+        -ldflags "${ldflags[*]}" \
+        -o "$pkgname" \
+        "./internal/main.go"
+}
+
+package() {
+    install -Dvm755 "$srcdir/$pkgname/$pkgname" "$pkgdir/usr/bin/$pkgname"
+}
