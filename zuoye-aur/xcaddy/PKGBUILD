@@ -2,7 +2,7 @@
 
 pkgname=xcaddy
 pkgver=0.4.5
-pkgrel=1
+pkgrel=2
 pkgdesc='Build Caddy with plugins'
 arch=('x86_64')
 url="https://github.com/caddyserver/xcaddy"
