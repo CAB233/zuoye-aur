@@ -1,0 +1,42 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=xcaddy
+pkgver=0.4.5
+pkgrel=1
+pkgdesc='Build Caddy with plugins'
+arch=('x86_64')
+url="https://github.com/caddyserver/xcaddy"
+license=("Apache-2.0")
+depends=('glibc')
+makedepends=(
+    'git'
+    'go'
+)
+source=("git+${url}.git#tag=v${pkgver}")
+sha256sums=('493de5f30212ce088c63ca753543cee4ffdc863a7a83ee79702537a36f365909')
+
+build() {
+    local ldflags=(
+        "-s"
+        "-w"
+        "-linkmode=external"
+    )
+
+    export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+    export CGO_CPPFLAGS="${CPPFLAGS}"
+    export CGO_CFLAGS="${CFLAGS}"
+    export CGO_CXXFLAGS="${CXXFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS}"
+    export CGO_ENABLED=1
+
+    cd "$srcdir/$pkgname"
+    go build \
+        -v \
+        -ldflags "${ldflags[*]}" \
+        -o "$pkgname" \
+        "./cmd/xcaddy"
+}
+
+package() {
+    install -Dvm755 "$srcdir/$pkgname/$pkgname" "$pkgdir/usr/bin/$pkgname"
+}
