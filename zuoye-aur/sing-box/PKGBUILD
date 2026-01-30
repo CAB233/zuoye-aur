@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=sing-box
-pkgver=1.12.17
+pkgver=1.12.18
 pkgrel=1
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
@@ -17,7 +17,7 @@ makedepends=(
     'go'
 )
 source=("git+https://github.com/SagerNet/sing-box.git#tag=v${pkgver}")
-sha256sums=('ac98abf73ffe41231854b136bf1b0ef6f4f9a787518bd13c12ecd6d746592948')
+sha256sums=('47be1f50a2bfe9485af109d4d53b71f6ed97c07b7952e60f43a16c3f269acec0')
 provides=("${pkgname}")
 conflicts=("${pkgname}")
 backup=("etc/${pkgname}/config.json")
