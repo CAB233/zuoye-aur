@@ -7,7 +7,7 @@
 
 _repo=Xray-core
 pkgname=xray
-pkgver=26.1.23
+pkgver=26.1.31
 pkgrel=1
 pkgdesc='The best v2ray-core, with XTLS support'
 arch=('x86_64')
@@ -29,7 +29,7 @@ source=(
     "xray.service"
     "xray@.service"
 )
-sha256sums=('f54f08c9fb67c29b23311265e2ff7df3287ce2631e16827522a98e3cf1e5bd3f'
+sha256sums=('8e785e2c942b0d44a6e547ad28d3e0d1bea7fe89fa60ce5fb1e6f4c32cafae91'
             '801131bf2eb079750f17d3e703e414eab8494db0d512164cdef3cc68cef308b8'
             '2d301e9f2fae728da55f33a15b2c36e90cdb657deafb5d6ab7d74375ce9fdf38'
             '03947eec80d413a0581f6fccbe204ee3b701887b9fda218560793263f2c90516'
