@@ -233,16 +233,15 @@ jobs:
 
       - name: 处理仓库数据库
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
-        working-directory: ./lilac/repo
         run: |
           docker exec lilac sudo -iu lilac \
-            /usr/bin/repo-add --sign ${{ env.REPO_NAME }}.db.tar.gz *.pkg.tar.zst
+            /usr/bin/repo-add --sign lilac/repo/${{ env.REPO_NAME }}.db.tar.gz lilac/repo/*.pkg.tar.zst
           docker exec lilac sudo -iu lilac \
-            find . -type l -delete
+            find lilac/repo/ -type l -delete
           docker exec lilac sudo -iu lilac \
-            rename -- .tar.gz '' *.tar.gz
+            rename -- .tar.gz '' lilac/repo/*.tar.gz
           docker exec lilac sudo -iu lilac \
-            rename -- .tar.gz.sig '.sig' *.tar.gz.sig
+            rename -- .tar.gz.sig '.sig' lilac/repo/*.tar.gz.sig
 
       - name: 上传产物和数据库
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
