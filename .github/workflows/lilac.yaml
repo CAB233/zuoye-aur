@@ -204,29 +204,6 @@ jobs:
           docker exec lilac cat /home/lilac/.lilac/build.log >> $GITHUB_OUTPUT
           echo "EOF" >> "$GITHUB_OUTPUT"
 
-      - name: 输出构建日志到 Summary
-        if: steps.log.outputs.log != ''
-        run: |
-          echo "## Build log" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          docker exec lilac cat /home/lilac/.lilac/build.log >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-
-      - name: 安装 apprise
-        if: steps.log.outputs.log != ''
-        run: |
-          sudo apt-get update
-          sudo apt-get install apprise
-
-      - name: 推送 build.log
-        if: steps.log.outputs.log != ''
-        run: |
-          message="<b>zuoye-aur notify</b><br><code>${{ steps.log.outputs.log }}</code>"
-          apprise -vv \
-            -i html \
-            -b "$message" \
-            "tgram://${{ secrets.APPRISE_TELEGRAM_TOKEN }}/${{ secrets.APPRISE_TELEGRAM_CHAT_ID }}"
-
       - name: 上传 lilac 持久性文件
         run: |
           docker exec lilac sudo -iu lilac \
@@ -271,6 +248,26 @@ jobs:
         run: |
           docker exec lilac sudo -iu lilac \
             /usr/bin/rclone copy -v --copy-links lilac/repo/ ${{ env.RCLONE_REMOTE }}/repo/x86_64
+
+      - name: 输出构建日志到 Summary
+        if: ${{ steps.count.outputs.pkgs_count != 0 && steps.log.outputs.log != ''}}
+        run: |
+          echo "## Build log" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          docker exec lilac cat /home/lilac/.lilac/build.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: 推送 build.log
+        if: ${{ steps.count.outputs.pkgs_count != 0 && steps.log.outputs.log != ''}}
+        run: |
+          sudo apt-get update
+          sudo apt-get install apprise
+          
+          message="<b>zuoye-aur notify</b><br><code>${{ steps.log.outputs.log }}</code>"
+          apprise -vv \
+            -i html \
+            -b "$message" \
+            "tgram://${{ secrets.APPRISE_TELEGRAM_TOKEN }}/${{ secrets.APPRISE_TELEGRAM_CHAT_ID }}"
 
       - name: 清理构建环境
         run: |
