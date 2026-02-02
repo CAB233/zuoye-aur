@@ -258,9 +258,8 @@ jobs:
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
         run: |
           docker exec lilac sudo -iu lilac \
-            /usr/bin/repo-add lilac/repo/${{ env.REPO_NAME }}.db.tar.gz lilac/repo/*.pkg.tar.zst
-          rm -f lilac/repo/${{ env.REPO_NAME }}.db.tar.gz.old
-          rm -f lilac/repo/${{ env.REPO_NAME }}.files.tar.gz.old
+            /usr/bin/repo-add --sign lilac/repo/${{ env.REPO_NAME }}.db.tar.gz lilac/repo/*.pkg.tar.zst
+          rm -f lilac/repo/${{ env.REPO_NAME }}.*.tar.gz.old
 
       - name: 上传产物和数据库
         if: ${{ steps.count.outputs.pkgs_count != 0 }}
