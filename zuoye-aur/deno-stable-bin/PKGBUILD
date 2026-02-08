@@ -3,7 +3,7 @@
 pkgname=deno-stable-bin
 _pkgname=deno
 pkgver=2.6.8
-pkgrel=1
+pkgrel=2
 pkgdesc="Runtime for JavaScript and TypeScript"
 arch=('x86_64')
 url="https://github.com/denoland/deno"
