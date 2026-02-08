@@ -1,0 +1,29 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=deno-stable-bin
+_pkgname=deno
+pkgver=2.6.8
+pkgrel=1
+pkgdesc="Runtime for JavaScript and TypeScript"
+arch=('x86_64')
+url="https://github.com/denoland/deno"
+license=('MIT')
+depends=('gcc-libs' 'glibc')
+makedepends=('unzip')
+source=('LICENSE::https://raw.githubusercontent.com/denoland/deno/refs/heads/main/LICENSE.md')
+source_x86_64=("$_pkgname-$pkgver.zip::$url/releases/download/v$pkgver/deno-x86_64-unknown-linux-gnu.zip")
+sha256sums=('f62497fffecc0852960c8d3e6934b9db86d16396e9b604072e923892cae3a588')
+sha256sums_x86_64=('e24aa1134b220d7185fa78136886b9a2d4014f0fa16ac6bec08b0f8f623344a1')
+provides=("$_pkgname")
+conflicts=("$_pkgname")
+
+package() {
+    install -Dvm755 "$srcdir/$_pkgname" -t "$pkgdir/usr/bin/"
+    install -Dvm644 "$srcdir/LICENSE" -t "$pkgdir/usr/share/licenses/$_pkgname/"
+    "$pkgdir/usr/bin/$_pkgname" completions bash | install -Dvm644 /dev/stdin \
+        "$pkgdir/usr/share/bash-completion/completions/$_pkgname"
+    "$pkgdir/usr/bin/$_pkgname" completions zsh | install -Dvm644 /dev/stdin \
+        "$pkgdir/usr/share/zsh/site-functions/_${_pkgname}"
+    "$pkgdir/usr/bin/$_pkgname" completions fish | install -Dvm644 /dev/stdin \
+        "$pkgdir/usr/share/fish/vendor_completions.d/${_pkgname}.fish"
+}
