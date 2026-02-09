@@ -2,7 +2,7 @@
 
 pkgname=jrsonnet-git
 _pkgname=jrsonnet
-pkgver=0.5.0.pre97.test.r18.g3c9d13d
+pkgver=0.5.0.pre97.test.r27.g7c5655f
 pkgrel=1
 pkgdesc="Rust implementation of Jsonnet language"
 arch=('x86_64')
