@@ -2,8 +2,8 @@
 
 pkgname=deno-stable-bin
 _pkgname=deno
-pkgver=2.6.8
-pkgrel=2
+pkgver=2.6.9
+pkgrel=1
 pkgdesc="Runtime for JavaScript and TypeScript"
 arch=('x86_64')
 url="https://github.com/denoland/deno"
@@ -13,7 +13,7 @@ makedepends=('unzip')
 source=('LICENSE::https://raw.githubusercontent.com/denoland/deno/refs/heads/main/LICENSE.md')
 source_x86_64=("$_pkgname-$pkgver.zip::$url/releases/download/v$pkgver/deno-x86_64-unknown-linux-gnu.zip")
 sha256sums=('f62497fffecc0852960c8d3e6934b9db86d16396e9b604072e923892cae3a588')
-sha256sums_x86_64=('e24aa1134b220d7185fa78136886b9a2d4014f0fa16ac6bec08b0f8f623344a1')
+sha256sums_x86_64=('8a677a4b0cea1a25aaecfc70d6c6a288f9ad69af0a92e9e9d513cabaaf3c688f')
 provides=("$_pkgname")
 conflicts=("$_pkgname")
 
