@@ -7,7 +7,7 @@
 # Contributor: Lucas Saliés Brum <lucas@archlinux.com.br>
 
 pkgname=papirus-icon-theme-git
-pkgver=20250501.r117.g438cfe1
+pkgver=20250501.r118.g9e3741c
 pkgrel=1
 epoch=1
 pkgdesc="Pixel perfect icon theme for Linux"
