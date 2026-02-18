@@ -5,7 +5,7 @@
 _pkgname="thorium"
 pkgname="$_pkgname-bin"
 pkgbase="$pkgname"
-pkgver=138.0.7204.300
+pkgver=138.0.7204.303
 pkgrel=1
 pkgdesc="Chromium fork focused on high performance and security"
 url="https://github.com/Alex313031/thorium"
@@ -18,7 +18,7 @@ source=(
   "$url/releases/download/M$pkgver/${_pkgname}-browser_${pkgver}_AVX2.deb"
   "thorium.desktop"
 )
-sha256sums=('690ad019a726addcfd8c3e1813f1785c83354cdaec29c4d66f0c93238f8c7f99'
+sha256sums=('df055a5c8ab0b0437f1265f6992de0d59ac49eb89caa1458e7b958d969847a98'
             'e8ff43a63db2124621000217337ead7d166895a1fc289bc9c93de39211223dd6')
 options=('!emptydirs' '!strip' '!debug')
 
