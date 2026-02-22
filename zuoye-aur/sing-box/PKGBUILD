@@ -1,26 +1,19 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=sing-box
-pkgver=1.12.23
-pkgrel=1
+pkgver=1.13.0
+pkgrel=0
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
 license=('custom:GPL-3.0-or-later WITH name use or association addition')
-depends=(
-    'glibc'
-    'dbus'
-    'polkit'
-)
-makedepends=(
-    'git'
-    'go'
-)
-source=("git+https://github.com/SagerNet/sing-box.git#tag=v${pkgver}")
-sha256sums=('47b6f23d47901064be9ccbbda908a676833e2f40ed7ed7f2f74a4426f8b64ff8')
-provides=("${pkgname}")
-conflicts=("${pkgname}")
-backup=("etc/${pkgname}/config.json")
+depends=('glibc' 'dbus' 'polkit')
+makedepends=('clang' 'git' 'go' 'lld')
+source=("git+https://github.com/SagerNet/sing-box.git#tag=v$pkgver")
+sha256sums=('7a574ad557b4e1bac1ffec4f95c38f3e7b24aec20c52f66f598e00bda05f9547')
+provides=("$pkgname")
+conflicts=("$pkgname")
+backup=("etc/$pkgname/config.json")
 
 build() {
     local tags=(
@@ -34,46 +27,47 @@ build() {
         #'with_v2ray_api'
         'with_gvisor'
         'with_tailscale'
+        'with_naive_outbound'
     )
     local ldflags=(
         "-s"
         "-w"
         "-linkmode=external"
-        "-X github.com/sagernet/sing-box/constant.Version=${pkgver}"
+        "-X github.com/sagernet/sing-box/constant.Version=$pkgver"
     )
 
     export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
     export CGO_CPPFLAGS="${CPPFLAGS}"
     export CGO_CFLAGS="${CFLAGS}"
     export CGO_CXXFLAGS="${CXXFLAGS}"
-    export CGO_LDFLAGS="${LDFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS} -fuse-ld=lld"
     export CGO_ENABLED=1
+    export CC=clang
+    export CXX=clang++
 
-    cd "${pkgname}"
+    cd "$pkgname"
     go build \
         -v \
         -tags "${tags[*]}" \
         -ldflags "${ldflags[*]}" \
         ./cmd/sing-box
-
-    install -d completions
-    go run ./cmd/sing-box completion bash > completions/bash
-    go run ./cmd/sing-box completion fish > completions/fish
-    go run ./cmd/sing-box completion zsh > completions/zsh
 }
 
 package() {
-    cd "${pkgname}"
-    install -Dm644 LICENSE -t "${pkgdir}/usr/share/licenses/${pkgname}"
-    install -Dm755 "${pkgname}" -t "${pkgdir}/usr/bin"
-    install -Dm644 "release/config/config.json" -t "${pkgdir}/etc/${pkgname}"
-    install -Dm644 "release/config/${pkgname}.service" -t "${pkgdir}/usr/lib/systemd/system"
-    install -Dm644 "release/config/${pkgname}@.service" -t "${pkgdir}/usr/lib/systemd/system"
-    install -Dm644 "release/config/${pkgname}.sysusers" "${pkgdir}/usr/lib/sysusers.d/${pkgname}.conf"
-    install -Dm644 "release/config/${pkgname}.rules" -t "${pkgdir}/usr/share/polkit-1/rules.d"
-    install -Dm644 "release/config/${pkgname}-split-dns.xml" "${pkgdir}/usr/share/dbus-1/system.d/${pkgname}.conf"
+    cd "$pkgname"
+    install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname"
+    install -Dm755 "$pkgname" -t "$pkgdir/usr/bin"
+    install -Dm644 "release/config/config.json" -t "$pkgdir/etc/$pkgname"
+    install -Dm644 "release/config/$pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dm644 "release/config/$pkgname@.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dm644 "release/config/$pkgname.sysusers" "$pkgdir/usr/lib/sysusers.d/$pkgname.conf"
+    install -Dm644 "release/config/$pkgname.rules" -t "$pkgdir/usr/share/polkit-1/rules.d"
+    install -Dm644 "release/config/$pkgname-split-dns.xml" "$pkgdir/usr/share/dbus-1/system.d/$pkgname.conf"
 
-    install -Dm644 completions/bash "${pkgdir}/usr/share/bash-completion/completions/${pkgname}"
-    install -Dm644 completions/fish "${pkgdir}/usr/share/fish/vendor_completions.d/${pkgname}.fish"
-    install -Dm644 completions/zsh "${pkgdir}/usr/share/zsh/site-functions/_${pkgname}"
+    "$pkgdir/usr/bin/$pkgname" completion bash | 
+        install -Dvm644 /dev/stdin "$pkgdir/usr/share/bash-completion/completions/$pkgname"
+    "$pkgdir/usr/bin/$pkgname" completion zsh | 
+        install -Dm644 /dev/stdin "$pkgdir/usr/share/zsh/site-functions/_$pkgname"
+    "$pkgdir/usr/bin/$pkgname" completion fish | 
+        install -Dm644 /dev/stdin "$pkgdir/usr/share/fish/vendor_completions.d/$pkgname.fish"
 }
