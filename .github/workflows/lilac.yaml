@@ -12,8 +12,6 @@ on:
 # Secrets:
 # - GPG_KEY: GPG private key for signing packages
 # - RCLONE_CONFIG: rclone configuration for remote storage
-# - SERVERCHAN_UID: ServerChan UID
-# - SERVERCHAN_SENDKEY: ServerChan sendkey
 # Variables:
 # - REPO_NAME: Name of the Arch Linux repository
 # - GIT_AUTHOR_NAME: Author name for git commits
@@ -107,8 +105,6 @@ jobs:
             --tmpfs /tmp \
             --tmpfs /run \
             --tmpfs /run/lock \
-            --env ${{ secrets.SERVERCHAN_UID }} \
-            --env ${{ secrets.SERVERCHAN_SENDKEY }} \
             -v $(pwd)/lilac:/home/lilac/lilac \
             ${{ steps.lowercase.outputs.DOCKER_IMAGE }}
 
