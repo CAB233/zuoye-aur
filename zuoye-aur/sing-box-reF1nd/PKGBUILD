@@ -8,33 +8,27 @@ pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
 license=('custom:GPL-3.0-or-later WITH name use or association addition')
-depends=(
-    'glibc'
-    'dbus'
-    'polkit'
-)
-makedepends=(
-    'git'
-    'go'
-)
+depends=('glibc' 'dbus' 'polkit')
+makedepends=('clang' 'git' 'go' 'lld')
 source=("git+https://github.com/reF1nd/sing-box.git#tag=v${pkgver}-reF1nd")
 sha256sums=('81010280e8f64dfdee70a1fa4e152fadb6efc055f4e2bb94c2d67617c8be4c3e')
-provides=("${_pkgname}")
-conflicts=("${_pkgname}")
-backup=("etc/${_pkgname}/config.json")
+provides=("$pkgname")
+conflicts=("$pkgname")
+backup=("etc/$pkgname/config.json")
 
 build() {
     local tags=(
         'with_quic'
         #'with_grpc'
         'with_dhcp'
-        #'with_wireguard'
+        'with_wireguard'
         'with_utls'
-        #'with_acme'
+        'with_acme'
         'with_clash_api'
         #'with_v2ray_api'
         'with_gvisor'
-        #'with_tailscale'
+        'with_tailscale'
+        'with_naive_outbound'
     )
     local ldflags=(
         "-s"
@@ -47,10 +41,12 @@ build() {
     export CGO_CPPFLAGS="${CPPFLAGS}"
     export CGO_CFLAGS="${CFLAGS}"
     export CGO_CXXFLAGS="${CXXFLAGS}"
-    export CGO_LDFLAGS="${LDFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS} -fuse-ld=lld"
     export CGO_ENABLED=1
+    export CC=clang
+    export CXX=clang++
 
-    cd "${_pkgname}"
+    cd "$_pkgname"
     go build \
         -v \
         -tags "${tags[*]}" \
@@ -59,20 +55,20 @@ build() {
 }
 
 package() {
-    cd "${_pkgname}"
-    install -Dm644 LICENSE -t "${pkgdir}/usr/share/licenses/${_pkgname}"
-    install -Dm755 "${_pkgname}" -t "${pkgdir}/usr/bin"
-    install -Dm644 "release/config/config.json" -t "${pkgdir}/etc/${_pkgname}"
-    install -Dm644 "release/config/${_pkgname}.service" -t "${pkgdir}/usr/lib/systemd/system"
-    install -Dm644 "release/config/${_pkgname}@.service" -t "${pkgdir}/usr/lib/systemd/system"
-    install -Dm644 "release/config/${_pkgname}.sysusers" "${pkgdir}/usr/lib/sysusers.d/${_pkgname}.conf"
-    install -Dm644 "release/config/${_pkgname}.rules" -t "${pkgdir}/usr/share/polkit-1/rules.d"
-    install -Dm644 "release/config/${_pkgname}-split-dns.xml" "${pkgdir}/usr/share/dbus-1/system.d/${_pkgname}.conf"
+    cd "$_pkgname"
+    install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/$_pkgname"
+    install -Dm755 "$_pkgname" -t "$pkgdir/usr/bin"
+    install -Dm644 "release/config/config.json" -t "$pkgdir/etc/$_pkgname"
+    install -Dm644 "release/config/$_pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dm644 "release/config/$_pkgname@.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dm644 "release/config/$_pkgname.sysusers" "$pkgdir/usr/lib/sysusers.d/$_pkgname.conf"
+    install -Dm644 "release/config/$_pkgname.rules" -t "$pkgdir/usr/share/polkit-1/rules.d"
+    install -Dm644 "release/config/$_pkgname-split-dns.xml" "$pkgdir/usr/share/dbus-1/system.d/$_pkgname.conf"
 
-    mkdir -pv "${pkgdir}/usr/share/bash-completion/completions"
-    "${pkgdir}/usr/bin/${_pkgname}" completion bash > "${pkgdir}/usr/share/bash-completion/completions/${_pkgname}"
-    mkdir -pv "${pkgdir}/usr/share/zsh/site-functions"
-    "${pkgdir}/usr/bin/${_pkgname}" completion zsh > "${pkgdir}/usr/share/zsh/site-functions/_${_pkgname}"
-    mkdir -pv "${pkgdir}/usr/share/fish/vendor_completions.d"
-    "${pkgdir}/usr/bin/${_pkgname}" completion fish > "${pkgdir}/usr/share/fish/vendor_completions.d/${_pkgname}.fish"
+    mkdir -pv "$pkgdir/usr/share/bash-completion/completions"
+    "$pkgdir/usr/bin/$_pkgname" completion bash > "$pkgdir/usr/share/bash-completion/completions/$_pkgname"
+    mkdir -pv "$pkgdir/usr/share/zsh/site-functions"
+    "$pkgdir/usr/bin/$_pkgname" completion zsh > "$pkgdir/usr/share/zsh/site-functions/_$_pkgname"
+    mkdir -pv "$pkgdir/usr/share/fish/vendor_completions.d"
+    "$pkgdir/usr/bin/$_pkgname" completion fish > "$pkgdir/usr/share/fish/vendor_completions.d/$_pkgname.fish"
 }
