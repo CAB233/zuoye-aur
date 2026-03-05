@@ -2,7 +2,7 @@
 
 pkgname=visual-studio-code-bin
 _pkgname=visual-studio-code
-pkgver=1.109.5
+pkgver=1.110.0
 pkgrel=1
 pkgdesc="Visual Studio Code (vscode): Editor for building and debugging modern web and cloud applications (official binary version)"
 arch=('x86_64')
@@ -36,12 +36,12 @@ optdepends=(
 )
 source=(
     "code_x64_${pkgver}.tar.gz::https://update.code.visualstudio.com/${pkgver}/linux-x64/stable"
-    "code-${pkgver}.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver}/resources/linux/code.desktop"
-    "code-${pkgver}-url-handler.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver}/resources/linux/code-url-handler.desktop"
-    "code-${pkgver}-workspace.xml.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver}/resources/linux/code-workspace.xml"
+    "code-${pkgver}.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver%.0}/resources/linux/code.desktop"
+    "code-${pkgver}-url-handler.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver%.0}/resources/linux/code-url-handler.desktop"
+    "code-${pkgver}-workspace.xml.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver%.0}/resources/linux/code-workspace.xml"
     "${_pkgname}-bin.sh"
 )
-sha256sums=('70160103c0dda50f651a37ee27a65a9a64a6938734cf1a0bcd49d83612bdb1a7'
+sha256sums=('a3f8ef5dea57b0ad7316d193632aa39c330f9e516d577d33994ca35ffc1b714f'
             '2f1782b30c4e040efff655fd9cf477930c5a0c81ddae27749b0cbb922c1d248e'
             'c361efa7e02fcad759ed80d2fbab67877f33219b981578af6fffaf18aeb12d9b'
             '3af748dd6578a1775e8eb7248ba397b7e11840df2ea6ee234ff76fee3dc306cf'
