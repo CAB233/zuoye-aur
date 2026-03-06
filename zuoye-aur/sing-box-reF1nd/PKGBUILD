@@ -2,8 +2,8 @@
 
 pkgname=sing-box-reF1nd
 _pkgname=sing-box
-pkgver=1.13.0
-pkgrel=2
+pkgver=1.13.1
+pkgrel=1
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
@@ -11,7 +11,7 @@ license=('custom:GPL-3.0-or-later WITH name use or association addition')
 depends=('glibc' 'dbus' 'polkit')
 makedepends=('clang' 'git' 'go' 'lld')
 source=("git+https://github.com/reF1nd/sing-box.git#tag=v${pkgver}-reF1nd")
-sha256sums=('81010280e8f64dfdee70a1fa4e152fadb6efc055f4e2bb94c2d67617c8be4c3e')
+sha256sums=('7cfac792e823fdd920c079e03800af3b2e8588958dd452200bd6cee571eb2bf6')
 provides=("$pkgname")
 conflicts=("$pkgname")
 backup=("etc/$pkgname/config.json")
