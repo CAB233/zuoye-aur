@@ -2,8 +2,8 @@
 
 pkgname=sing-box-reF1nd
 _pkgname=sing-box
-pkgver=1.13.1
-pkgrel=1
+pkgver=1.13.2
+pkgrel=0
 pkgdesc='The universal proxy platform.'
 arch=('x86_64')
 url='https://sing-box.sagernet.org/'
@@ -11,13 +11,13 @@ license=('custom:GPL-3.0-or-later WITH name use or association addition')
 depends=('glibc' 'dbus' 'polkit')
 makedepends=('clang' 'git' 'go' 'lld')
 source=("git+https://github.com/reF1nd/sing-box.git#tag=v${pkgver}-reF1nd")
-sha256sums=('7cfac792e823fdd920c079e03800af3b2e8588958dd452200bd6cee571eb2bf6')
+sha256sums=('e3b4d9001d21c4c2a54969f617885b6b0cb66175ad83e969ad1b605be4328d54')
 provides=("$pkgname")
 conflicts=("$pkgname")
 backup=("etc/$pkgname/config.json")
 
 build() {
-    cd "$pkgname"
+    cd "$_pkgname"
     local tags=$(cat release/DEFAULT_BUILD_TAGS)
     local _ldflags=$(cat release/LDFLAGS)
     local ldflags=(
@@ -55,10 +55,10 @@ package() {
     install -Dvm644 "release/config/$_pkgname.rules" -t "$pkgdir/usr/share/polkit-1/rules.d"
     install -Dvm644 "release/config/$_pkgname-split-dns.xml" "$pkgdir/usr/share/dbus-1/system.d/$_pkgname.conf"
 
-    "$pkgdir/usr/bin/$pkgname" completion bash | 
-        install -Dvm644 /dev/stdin "$pkgdir/usr/share/bash-completion/completions/$pkgname"
-    "$pkgdir/usr/bin/$pkgname" completion zsh | 
-        install -Dm644 /dev/stdin "$pkgdir/usr/share/zsh/site-functions/_$pkgname"
-    "$pkgdir/usr/bin/$pkgname" completion fish | 
-        install -Dm644 /dev/stdin "$pkgdir/usr/share/fish/vendor_completions.d/$pkgname.fish"
+    "$pkgdir/usr/bin/$_pkgname" completion bash | 
+        install -Dvm644 /dev/stdin "$pkgdir/usr/share/bash-completion/completions/$_pkgname"
+    "$pkgdir/usr/bin/$_pkgname" completion zsh | 
+        install -Dm644 /dev/stdin "$pkgdir/usr/share/zsh/site-functions/_$_pkgname"
+    "$pkgdir/usr/bin/$_pkgname" completion fish | 
+        install -Dm644 /dev/stdin "$pkgdir/usr/share/fish/vendor_completions.d/$_pkgname.fish"
 }

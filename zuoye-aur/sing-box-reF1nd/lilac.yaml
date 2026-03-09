@@ -8,5 +8,7 @@ update_on:
   - source: github
     github: reF1nd/sing-box
     use_max_tag: true
-    include_regex: '^v\d+\.\d+\.\d+'
+    include_regex: '^v\d+\.\d+\.\d+-reF1nd$'
     prefix: v
+    from_pattern: '^(\d+\.\d+\.\d+)-reF1nd$'
+    to_pattern: '\1'
