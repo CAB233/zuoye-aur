@@ -36,9 +36,9 @@ optdepends=(
 )
 source=(
     "code_x64_${pkgver}.tar.gz::https://update.code.visualstudio.com/${pkgver}/linux-x64/stable"
-    "code-${pkgver}.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver%.0}/resources/linux/code.desktop"
-    "code-${pkgver}-url-handler.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver%.0}/resources/linux/code-url-handler.desktop"
-    "code-${pkgver}-workspace.xml.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver%.0}/resources/linux/code-workspace.xml"
+    "code-${pkgver}.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver}/resources/linux/code.desktop"
+    "code-${pkgver}-url-handler.desktop.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver}/resources/linux/code-url-handler.desktop"
+    "code-${pkgver}-workspace.xml.in::https://raw.githubusercontent.com/microsoft/vscode/${pkgver}/resources/linux/code-workspace.xml"
     "${_pkgname}-bin.sh"
 )
 sha256sums=('9d7c4fba8a595fc80e5ab728fbe558974000b02c43532924a128163a21c5518c'
