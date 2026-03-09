@@ -16,24 +16,15 @@ conflicts=("$pkgname")
 backup=("etc/$pkgname/config.json")
 
 build() {
-    local tags=(
-        'with_quic'
-        #'with_grpc'
-        'with_dhcp'
-        'with_wireguard'
-        'with_utls'
-        'with_acme'
-        'with_clash_api'
-        #'with_v2ray_api'
-        'with_gvisor'
-        'with_tailscale'
-        'with_naive_outbound'
-    )
+    cd "$pkgname"
+    local tags=$(cat release/DEFAULT_BUILD_TAGS)
+    local _ldflags=$(cat release/LDFLAGS)
     local ldflags=(
         "-s"
         "-w"
         "-linkmode=external"
         "-X github.com/sagernet/sing-box/constant.Version=$pkgver"
+        "$_ldflags"
     )
 
     export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
@@ -45,24 +36,23 @@ build() {
     export CC=clang
     export CXX=clang++
 
-    cd "$pkgname"
     go build \
         -v \
-        -tags "${tags[*]}" \
+        -tags "$tags" \
         -ldflags "${ldflags[*]}" \
         ./cmd/sing-box
 }
 
 package() {
     cd "$pkgname"
-    install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname"
-    install -Dm755 "$pkgname" -t "$pkgdir/usr/bin"
-    install -Dm644 "release/config/config.json" -t "$pkgdir/etc/$pkgname"
-    install -Dm644 "release/config/$pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
-    install -Dm644 "release/config/$pkgname@.service" -t "$pkgdir/usr/lib/systemd/system"
-    install -Dm644 "release/config/$pkgname.sysusers" "$pkgdir/usr/lib/sysusers.d/$pkgname.conf"
-    install -Dm644 "release/config/$pkgname.rules" -t "$pkgdir/usr/share/polkit-1/rules.d"
-    install -Dm644 "release/config/$pkgname-split-dns.xml" "$pkgdir/usr/share/dbus-1/system.d/$pkgname.conf"
+    install -Dvm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname"
+    install -Dvm755 "$pkgname" -t "$pkgdir/usr/bin"
+    install -Dvm644 "release/config/config.json" -t "$pkgdir/etc/$pkgname"
+    install -Dvm644 "release/config/$pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dvm644 "release/config/$pkgname@.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dvm644 "release/config/$pkgname.sysusers" "$pkgdir/usr/lib/sysusers.d/$pkgname.conf"
+    install -Dvm644 "release/config/$pkgname.rules" -t "$pkgdir/usr/share/polkit-1/rules.d"
+    install -Dvm644 "release/config/$pkgname-split-dns.xml" "$pkgdir/usr/share/dbus-1/system.d/$pkgname.conf"
 
     "$pkgdir/usr/bin/$pkgname" completion bash | 
         install -Dvm644 /dev/stdin "$pkgdir/usr/share/bash-completion/completions/$pkgname"
