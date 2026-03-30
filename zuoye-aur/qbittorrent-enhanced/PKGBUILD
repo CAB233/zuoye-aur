@@ -20,6 +20,7 @@ makedepends=(
     'cmake'
     'boost>=1.65'
     'qt6-tools'
+    'qt6-svg'
     'ninja'
 )
 optdepends=('python: needed for torrent search tab')
