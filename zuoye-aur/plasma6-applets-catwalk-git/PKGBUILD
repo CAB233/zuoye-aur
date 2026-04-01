@@ -2,7 +2,7 @@
 
 pkgname=plasma6-applets-catwalk-git
 pkgver=r12.eded6e7
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple plasmoid showing the total CPU usage. Visually made like RunCat."
 url="https://invent.kde.org/heddxh/applet-catwalk"
 arch=('x86_64')
