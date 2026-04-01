@@ -9,5 +9,3 @@ update_on:
     github: luisbocanegra/plasma-panel-colorizer
     use_latest_release: true
     prefix: v
-  - source: alpm
-    alpm: kwin
