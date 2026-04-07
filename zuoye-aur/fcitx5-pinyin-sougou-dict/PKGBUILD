@@ -2,7 +2,7 @@
 
 pkgname=fcitx5-pinyin-sougou-dict
 pkgver=20260319
-pkgrel=0
+pkgrel=1
 pkgdesc="Sougou Pinyin dictionary for Fcitx5"
 arch=('any')
 url="https://github.com/blackteahamburger/fcitx5-pinyin-sougou-dict"
