@@ -1,14 +1,14 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=fcitx5-pinyin-sougou-dict
-pkgver=20260319
+pkgver=20260420
 pkgrel=1
 pkgdesc="Sougou Pinyin dictionary for Fcitx5"
 arch=('any')
 url="https://github.com/blackteahamburger/fcitx5-pinyin-sougou-dict"
 license=('custom')
 source=("$pkgname-$pkgver.dict::${url}/releases/download/$pkgver/sougou.dict")
-sha256sums=('8e0813a7a09d620744c0a834669f2500cd849dbcbf6207a0e3220173ca8c9d7c')
+sha256sums=('f01b3d970c82e44e25a2dee997d9b7a6e882a2c4566df693d8f6db60543b5df8')
 
 package() {
     install -Dvm644 "$srcdir/$pkgname-$pkgver.dict" "$pkgdir"/usr/share/fcitx5/pinyin/dictionaries/sougou.dict
