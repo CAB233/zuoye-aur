@@ -1,0 +1,65 @@
+# Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
+
+pkgname=sing-box-testing
+_pkgname=sing-box
+pkgver=1.14.0alpha.15
+_pkgver=$(echo "$pkgver" | sed 's/\([0-9]\+\.[0-9]\+.[0-9]\+\)\(alpha\|beta\|rc\)/\1-\2/')
+pkgrel=0
+pkgdesc='The universal proxy platform.'
+arch=('x86_64')
+url='https://sing-box.sagernet.org/'
+license=('custom:GPL-3.0-or-later WITH name use or association addition')
+depends=('glibc' 'dbus' 'polkit')
+makedepends=('clang' 'git' 'go' 'lld')
+source=("git+https://github.com/SagerNet/sing-box.git#tag=v$_pkgver")
+sha256sums=('732eb25a7c628092419f2513ccc75f9adb7dd2716af24792788a258c5c5acf74')
+provides=("$_pkgname")
+conflicts=("$_pkgname")
+backup=("etc/$_pkgname/config.json")
+
+build() {
+    cd "$_pkgname"
+    local tags=$(cat release/DEFAULT_BUILD_TAGS)
+    local _ldflags=$(cat release/LDFLAGS)
+    local ldflags=(
+        "-s"
+        "-w"
+        "-linkmode=external"
+        "-X github.com/sagernet/sing-box/constant.Version=$_pkgver"
+        "$_ldflags"
+    )
+
+    export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+    export CGO_CPPFLAGS="${CPPFLAGS}"
+    export CGO_CFLAGS="${CFLAGS}"
+    export CGO_CXXFLAGS="${CXXFLAGS}"
+    export CGO_LDFLAGS="${LDFLAGS} -fuse-ld=lld"
+    export CGO_ENABLED=1
+    export CC=clang
+    export CXX=clang++
+
+    go build \
+        -v \
+        -tags "$tags" \
+        -ldflags "${ldflags[*]}" \
+        ./cmd/sing-box
+}
+
+package() {
+    cd "$_pkgname"
+    install -Dvm644 LICENSE -t "$pkgdir/usr/share/licenses/$_pkgname"
+    install -Dvm755 "$_pkgname" -t "$pkgdir/usr/bin"
+    install -Dvm644 "release/config/config.json" -t "$pkgdir/etc/$_pkgname"
+    install -Dvm644 "release/config/$_pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dvm644 "release/config/$_pkgname@.service" -t "$pkgdir/usr/lib/systemd/system"
+    install -Dvm644 "release/config/$_pkgname.sysusers" "$pkgdir/usr/lib/sysusers.d/$_pkgname.conf"
+    install -Dvm644 "release/config/$_pkgname.rules" -t "$pkgdir/usr/share/polkit-1/rules.d"
+    install -Dvm644 "release/config/$_pkgname-split-dns.xml" "$pkgdir/usr/share/dbus-1/system.d/$_pkgname.conf"
+
+    "$pkgdir/usr/bin/$_pkgname" completion bash | 
+        install -Dvm644 /dev/stdin "$pkgdir/usr/share/bash-completion/completions/$_pkgname"
+    "$pkgdir/usr/bin/$_pkgname" completion zsh | 
+        install -Dm644 /dev/stdin "$pkgdir/usr/share/zsh/site-functions/_$_pkgname"
+    "$pkgdir/usr/bin/$_pkgname" completion fish | 
+        install -Dm644 /dev/stdin "$pkgdir/usr/share/fish/vendor_completions.d/$_pkgname.fish"
+}

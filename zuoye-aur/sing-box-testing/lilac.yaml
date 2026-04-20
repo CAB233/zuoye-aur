@@ -1,0 +1,14 @@
+maintainers:
+- github: CAB233
+
+pre_build_script: update_pkgver_and_pkgrel(_G.newver)
+post_build_script: git_pkgbuild_commit()
+
+update_on:
+  - source: github
+    github: SagerNet/sing-box
+    use_max_tag: true
+    prefix: v
+    include_regex: '^v\d+.\d+.\d+(.*)?'
+    from_pattern: "-"
+    to_pattern: ""
