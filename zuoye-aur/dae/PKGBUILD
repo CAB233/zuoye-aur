@@ -2,7 +2,7 @@
 # Maintainer: Integral <integral at member dot fsf dot org>
 
 pkgname=dae
-pkgver=1.0.0
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="A Linux lightweight and high-performance transparent proxy solution based on eBPF."
 arch=('x86_64')
@@ -22,7 +22,7 @@ source=(
     "${pkgname}-${pkgver}.zip::${url}/releases/download/v${pkgver}/${pkgname}-full-src.zip"
     "0001-clean-BUILD_ARGS.patch"
 )
-sha256sums=('d933b93fc30cb4e9941cbb1be23557bd6caa2a33af212883505fec435d06fc13'
+sha256sums=('e2e4207dc110ef21b07d9150272bcedb466ec93b435a6090fea3a946485f2328'
             'b7ab995a9e5ae57e710b019d866c47ef7fdeb96f9b8e7a57a1edeac0fe7aad81')
 
 prepare() {
