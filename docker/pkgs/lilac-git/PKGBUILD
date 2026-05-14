@@ -26,7 +26,7 @@ source=(
   '0001-feat-Dependency.resolve-search-in-depsdir.patch'
 )
 sha256sums=('SKIP'
-            'ec074a6bfa59e2a2a69d071e18f3c358eaae56f9841d3ee5053c7de685c71bdf')
+            '2e4be3d9edb5ee49717fe639a42ed508ec53db2cc4f01953179e119da147de00')
 
 pkgver() {
   cd $_pkgname
