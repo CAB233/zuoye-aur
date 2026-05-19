@@ -1,7 +1,7 @@
 # Maintainer: Mark Wagie <mark dot wagie at proton dot me>
 pkgname=fluent-gtk-theme-git
 pkgver=2025.04.17.r26.g9fc5291
-pkgrel=2
+pkgrel=3
 pkgdesc="Fluent design gtk theme for linux desktops"
 arch=('any')
 url="https://github.com/vinceliuice/Fluent-gtk-theme"
@@ -28,5 +28,10 @@ pkgver() {
 package() {
   cd Fluent-gtk-theme
   install -d "$pkgdir/usr/share/themes"
-  ./install.sh -t default -i arch --tweaks solid -d "$pkgdir/usr/share/themes"
+  ./install.sh \
+    --dest "$pkgdir/usr/share/themes" \
+    --theme green \
+    --icon arch \
+    --libadwaita \
+    --tweaks solid round noborder square
 }
