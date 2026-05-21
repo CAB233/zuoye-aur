@@ -1,7 +1,7 @@
 # Maintainer: yidaduizuoye <yidaduizuoye at outlook dot com>
 
 pkgname=butane
-pkgver=0.27.0
+pkgver=0.28.0
 pkgrel=1
 pkgdesc='Human readable Butane Configs into machine readable Ignition Configs Translator'
 arch=('x86_64')
@@ -13,7 +13,7 @@ makedepends=(
     'go'
 )
 source=("git+${url}.git#tag=v${pkgver}")
-sha256sums=('e0af0d96d8a6e24941f99903cca5b70f1d732a26cec8a4d7e7235c703a58975e')
+sha256sums=('6e2ab28c44b6a0d222503107aadea5e042a353b31dc0bb8d4acb0b6d89e97f72')
 
 build() {
     local ldflags=(
