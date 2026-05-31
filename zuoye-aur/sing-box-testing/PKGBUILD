@@ -2,7 +2,7 @@
 
 pkgname=sing-box-testing
 _pkgname=sing-box
-pkgver=1.14.0alpha.26
+pkgver=1.14.0alpha.27
 _pkgver=$(echo "$pkgver" | sed 's/\([0-9]\+\.[0-9]\+.[0-9]\+\)\(alpha\|beta\|rc\)/\1-\2/')
 pkgrel=1
 pkgdesc='The universal proxy platform.'
@@ -12,7 +12,7 @@ license=('custom:GPL-3.0-or-later WITH name use or association addition')
 depends=('glibc' 'dbus' 'polkit')
 makedepends=('clang' 'git' 'go' 'lld')
 source=("git+https://github.com/SagerNet/sing-box.git#tag=v$_pkgver")
-sha256sums=('79687e924891b2d841b2670bd14d152509bf3edfad3d10354ffde2be2c3027da')
+sha256sums=('bd0f3730f41e7248b01edfcb22b440afa183e7fc7ba15792b69e7a51fedbd9bb')
 provides=("$_pkgname")
 conflicts=("$_pkgname")
 backup=("etc/$_pkgname/config.json")
